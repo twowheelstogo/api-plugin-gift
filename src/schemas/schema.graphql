@@ -1,0 +1,56 @@
+"GiftNote data"
+type GiftNote {
+    "Person name who sends the message"
+    sender: String
+    
+    "Receiver person name"
+    receiver:String
+
+    "The message dedicated to reciever"
+    message:String
+}
+input GiftNoteInput {
+    "Person name who sends the message"
+    sender: String
+    
+    "Receiver person name"
+    receiver:String
+
+    "The message dedicated to reciever"
+    message:String
+}
+input SetGiftNoteOnCartInput {
+    "gift details"
+    giftNote: GiftNoteInput!
+
+    "The cart to set gift details on"
+    cartId: ID!
+
+    "The token for the cart, required if it is an anonymous cart"
+    cartToken: String
+}
+"The response from the `setShippingAddressOnCart` mutation"
+type SetGiftNoteOnCartPayload {
+  "The updated Cart"
+  cart: Cart!
+
+  "The same string you sent with the mutation params, for matching mutation calls with their responses"
+  clientMutationId: String
+}
+extend type Checkout{
+    "gift data collected"
+    giftNote: GiftNote
+}
+extend type Mutation {
+    "Set the gift details for a checkout data collected"
+    setGiftNoteOnCart(
+        "Mutation input"
+        input: SetGiftNoteOnCartInput!
+    ): SetGiftNoteOnCartPayload!
+}
+extend input OrderInput {
+    giftNote: GiftNoteInput
+}
+extend type Order {
+    giftNote: GiftNote
+}
